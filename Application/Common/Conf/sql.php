@@ -1,11 +1,11 @@
 <!-- 创建管理员表 --> 
-create table user(
+create table admin(
 	id int auto_increment primary key not null,
 	username varchar(100) not null,
 	password varchar(100) not null,
 	age int(3) not null,
 	gender bit(1) default 1 comment '性别',
-	role_id int comment '角色id',
+	role_id int comment '角色id'
 )engine=InnoDB charset=utf8;
 
 <!-- 文章表 -->
@@ -17,7 +17,7 @@ create table article(
 	author varchar(100) comment '作者',
 	time varchar(100) comment '上传时间',
 	thumb varchar(200) comment '缩略图',
-	music varchar(200) comment '音乐',
+	music varchar(200) comment '音乐'
 )engine=InnoDB charset=utf8;
 
 <!-- 文章内容表 -->
