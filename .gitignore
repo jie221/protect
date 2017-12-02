@@ -1,0 +1,4 @@
+##ignore this file##
+/Application/Runtime
+*.php
+*.html
