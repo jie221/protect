@@ -35,4 +35,21 @@ class BaseController extends Controller
 		$this->userid = $userid;
 		return true;
 	}
+
+	public function changeValue()
+	{
+		$table = I('table'); // 表名
+		$id_name = I('id_name'); // 表主键id名
+		$id_value = I('id_value'); // 表主键id值
+		$field  = I('field'); // 修改哪个字段
+		$value  = I('value'); // 修改字段值
+
+		$res = M($table)->where(array($id_name=>$id_value))->fetchSql(true)->save(array($field=>$value));
+		if($res){
+			response(array('status'=>1));
+		}else{
+			response(array('status'=>0));
+		}
+	}
+
 }

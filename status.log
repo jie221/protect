@@ -1,0 +1,16 @@
+10:23:50am	2
+0
+0
+0
+0
+0
+0
+0
+UPDATE `admin` SET `username`='editor',`gender`='0',`status`='0' WHERE ( id =  )
+1
+UPDATE `admin` SET `username`='how1',`gender`='0',`status`='1',`updateTime`='1512117976' WHERE ( id = 4 )
+UPDATE `admin` SET `username`='how1',`gender`='0',`status`='1',`updateTime`='1512118039' WHERE ( id = 4 )
+1
+1
+1
+1

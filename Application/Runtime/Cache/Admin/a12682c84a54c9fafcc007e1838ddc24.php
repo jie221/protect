@@ -31,10 +31,11 @@
 <article class="page-container">
 	<form class="form form-horizontal" id="form-admin-add">
 		<input type="hidden" name='act' value="<?php echo ($act); ?>" >
+		<input type="hidden" name="id" value="<?php echo ($info["id"]); ?>">
 	<div class="row cl">
 		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>管理员：</label>
 		<div class="formControls col-xs-8 col-sm-9">
-			<input type="text" class="input-text" value="" placeholder="" id="adminName" name="adminName">
+			<input type="text" class="input-text" value="<?php echo ($info['username']); ?>" placeholder="" name="username">
 		</div>
 	</div>
 	<div class="row cl">
@@ -47,35 +48,40 @@
 		<label class="form-label col-xs-4 col-sm-3">性别：</label>
 		<div class="formControls col-xs-8 col-sm-9 skin-minimal">
 			<div class="radio-box">
-				<input name="gender" type="radio" id="sex-1" checked>
-				<label for="sex-1">男</label>
+				<label><input name="gender" type="radio" <?php if($info['gender'] == 1): ?>checked<?php endif; ?> value="1">男</label>
 			</div>
 			<div class="radio-box">
-				<input type="radio" id="sex-2" name="gender">
-				<label for="sex-2">女</label>
+				<label><input type="radio" name="gender" <?php if($info['gender'] == 0): ?>checked<?php endif; ?> value='0'>女</label>
 			</div>
 		</div>
 	</div>
-	<div class="row cl">
-		<label class="form-label col-xs-4 col-sm-3">手机：</label>
-		<div class="formControls col-xs-8 col-sm-9">
-			<input type="text" class="input-text" value="" placeholder="" id="phone" name="phone">
-		</div>
-	</div>
-	<div class="row cl">
+	<!-- <div class="row cl">
 		<label class="form-label col-xs-4 col-sm-3">角色：</label>
-		<div class="formControls col-xs-8 col-sm-9"> <span class="select-box" style="width:150px;">
-			<select class="select" name="roleId" size="1">
-				<option value="0">超级管理员</option>
-				<option value="1">总编</option>
-				<option value="2">栏目主辑</option>
-				<option value="3">栏目编辑</option>
-			</select>
-			</span> </div>
+		<div class="formControls col-xs-8 col-sm-9"> 
+			<span class="select-box" style="width:150px;">
+				<select class="select" name="roleId" size="1">
+					<option <?php if($info["roleId"] == 0): ?>selected<?php endif; ?> value="0">超级管理员</option>
+					<option <?php if($info["roleId"] == 1): ?>selected<?php endif; ?> value="1">总编</option>
+					<option <?php if($info["roleId"] == 2): ?>selected<?php endif; ?> value="2">栏目主辑</option>
+					<option <?php if($info["roleId"] == 3): ?>selected<?php endif; ?> value="3">栏目编辑</option>
+				</select>
+			</span> 
+		</div>
+	</div> -->
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3">是否启用：</label>
+		<div class="formControls col-xs-8 col-sm-9 skin-minimal">
+			<div class="radio-box">
+				<label><input name="status" type="radio" <?php if($info["status"] == 1): ?>checked<?php endif; ?> value="1">启用</label>
+			</div>
+			<div class="radio-box">
+				<label><input type="radio" name="status" <?php if($info["status"] == 0): ?>checked<?php endif; ?> value='0'>禁用</label>
+			</div>
+		</div>
 	</div>
 	<div class="row cl">
 		<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
-			<input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+			<input class="btn btn-primary radius" type="button" value="&nbsp;&nbsp;提交&nbsp;&nbsp;" id="btn_sub">
 		</div>
 	</div>
 	</form>
@@ -87,7 +93,7 @@
 <script type="text/javascript" src="/Public/Admin/lib/layer/2.4/layer.js"></script>
 <script type="text/javascript" src="/Public/Admin/static/h-ui/js/H-ui.min.js"></script>
 <script type="text/javascript" src="/Public/Admin/static/h-ui.admin/js/H-ui.admin.js"></script> 
-<script type="text/javascript" src="/Public/Admin/lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="/Public/Admin/config/config.js"></script> 
 <!--/_footer 作为公共模版分离出去-->
 
 <!--/_footer 作为公共模版分离出去-->
@@ -104,39 +110,27 @@ $(function(){
 		increaseArea: '20%'
 	});
 	
-	$("#form-admin-add").validate({
-		rules:{
-			adminName:{
-				required:true,
-				minlength:4,
-				maxlength:16
-			},
-			phone:{
-				isPhone:true,
-			},
-			adminRole:{
-				required:true,
-			},
-		},
-		onkeyup:false,
-		focusCleanup:true,
-		success:"valid",
-		submitHandler:function(form){
-			$(form).ajaxSubmit({
-				type: 'post',
-				url: "/admin/admin/adminHandle" ,
-				success: function(data){
-					layer.msg('添加成功!',{icon:1,time:1000});
-				},
-        error: function(XmlHttpRequest, textStatus, errorThrown){
-					layer.msg('error!',{icon:1,time:1000});
+	$("#btn_sub").click(function(){
+		var postData = serializeData("form-admin-add");
+		$.ajax({
+			url:"<?php echo U('adminHandle');?>",
+			data:postData,
+			type:"post",
+			success:function(result){
+				console.log(result);
+				var res = JSON.parse(result);
+				if(res.status == 1){
+					layer.msg(res.msg,{icon:1,time:1000},function(){
+						parent.location.href = "/admin.php/admin/index"
+					})
+				}else if(res.status == 0){
+					layer.msg(res.msg,{icon:2,time:1000})
 				}
-			});
-			var index = parent.layer.getFrameIndex(window.name);
-			parent.$('.btn-refresh').click();
-			parent.layer.close(index);
-		}
-	});
+			}
+		})
+	})
+	
+
 });
 </script> 
 <!--/请在上方写此页面业务相关的脚本-->

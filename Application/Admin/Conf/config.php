@@ -13,4 +13,6 @@ return array(
   'DB_PREFIX'             =>  '',    // 数据库表前缀
   'DB_DEBUG'  			=>  TRUE, // 数据库调试模式 开启后可以记录SQL日志
   'DB_CHARSET'            =>  'utf8',      // 数据库编码默认采用utf8
+
+  'SALT'                  => 'THINKPHP'
 );
